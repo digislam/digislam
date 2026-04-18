@@ -284,7 +284,7 @@ input[readonly]{opacity:.65;cursor:default;}
     </div>
     <button class="btn" onclick="loginWithPwd()" id="login-btn">login →</button>
     <div style="text-align:center;margin-top:14px;">
-      <button class="btn-ghost" onclick="document.getElementById('google-section').style.display='block';document.querySelector('.or-divider').style.display='flex';">forgot password? sign in with google again</button>
+      <button class="btn-ghost" onclick="startForgotFlow()">forgot password? sign in with google again</button>
     </div>
     <div class="pb"></div>
   </div>
@@ -523,19 +523,18 @@ import {
    🔧 CONFIG — replace with your actual values
    ══════════════════════════════════════════════ */
 const firebaseConfig = {
-    apiKey: "AIzaSyAdhl6v0V217SYs3_ksq0_tAPvXflxQ9D4",
-    authDomain: "digislam-cfa4f.firebaseapp.com",
-    projectId: "digislam-cfa4f",
-    storageBucket: "digislam-cfa4f.firebasestorage.app",
-    messagingSenderId: "316135057670",
-    appId: "1:316135057670:web:8a8af1d787f11f71bc9687",
-    measurementId: "G-TVYJ0VXXEQ"
+  apiKey: "AIzaSyBg7bIjZTsr7981g4nszBDjo-jZk-QlIQ8",
+  authDomain: "slam-dbe6f.firebaseapp.com",
+  projectId: "slam-dbe6f",
+  storageBucket: "slam-dbe6f.firebasestorage.app",
+  messagingSenderId: "582440232465",
+  appId: "1:582440232465:web:c7bf2a6bc4fd51caf1f3b0"
 };
 
 // 🔧 Your Resend API key & sender — set in Firebase Functions env, not here.
 // The actual send happens via a Cloud Function (see SETUP.md).
 // This is just the endpoint you'll deploy.
-const NOTIFY_FUNCTION_URL = "https://digislam.vercel.app/api/notify";
+const NOTIFY_FUNCTION_URL = "https://us-central1-slam-dbe6f.cloudfunctions.net/notifySlam";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -547,7 +546,15 @@ let classlist = [], currentUser = null, currentName = '', currentEmail = '';
 let sessionActive = false, selectedPerson = null, isAnon = true;
 let deleteSlamId = null, bootedScreen = false, isProcessing = false;
 let selectedEmoji = null, penColor = '#1c1914';
+let isForgotFlow = false;
 window._slamImgPaths = {};
+
+window.startForgotFlow = () => {
+  isForgotFlow = true;
+  sessionStorage.setItem('forgotFlow', '1');
+  document.getElementById('google-section').style.display = 'block';
+  document.querySelector('.or-divider').style.display = 'flex';
+};
 
 /* ══ AUTH BOOT ══ */
 onAuthStateChanged(auth, async (user) => {
@@ -604,9 +611,14 @@ window.signInWithGoogle = async () => {
     currentUser = user;
     currentEmail = email;
 
-    // Check if password already set
+    // Check forgot flow from sessionStorage too (survives popup)
+    const forgotFlow = isForgotFlow || sessionStorage.getItem('forgotFlow') === '1';
+    sessionStorage.removeItem('forgotFlow');
+    isForgotFlow = false;
+
+    // Check if password already set — but if forgot flow, always go to set password
     const ud = await getDoc(doc(db,'users', user.uid));
-    if (ud.exists() && ud.data().hasPassword) {
+    if (ud.exists() && ud.data().hasPassword && !forgotFlow) {
       currentName = ud.data().name || whitelist.name;
       sessionActive = true;
       await loadClasslist();
@@ -841,7 +853,7 @@ function resetWriteForm() {
 
 // Imgur anonymous upload — no account needed
 // Client ID from a free registered Imgur app (read-only, safe to expose)
-const VERCEL_URL = "https://digislam.vercel.app/"; // 🔧 replace with your Vercel URL
+const VERCEL_URL = "https://your-project.vercel.app"; // 🔧 replace with your Vercel URL
 
 let uploadedImgUrl = null;
 
