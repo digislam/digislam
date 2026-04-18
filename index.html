@@ -534,8 +534,7 @@ const firebaseConfig = {
 // 🔧 Your Resend API key & sender — set in Firebase Functions env, not here.
 // The actual send happens via a Cloud Function (see SETUP.md).
 // This is just the endpoint you'll deploy.
-const NOTIFY_FUNCTION_URL = "https://us-central1-slam-dbe6f.cloudfunctions.net/notifySlam";
-
+const NOTIFY_FUNCTION_URL = "https://digislam.vercel.app/api/notify";
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
