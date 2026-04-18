@@ -50,7 +50,7 @@ export default async function handler(req, res) {
               </p>
             </div>
             <div style="text-align:center;">
-              <a href="https://digislam-f2fd5.web.app"
+              <a href="https://digislam.vercel.app"
                  style="display:inline-block;background:#1e4d2b;color:#fff;padding:14px 32px;border-radius:8px;text-decoration:none;font-size:14px;font-weight:700;letter-spacing:0.05em;">
                 open slambook →
               </a>
