@@ -753,6 +753,7 @@ window.savePassword = async () => {
       } else { throw e; }
     }
     currentUser = firebaseUser;
+    console.log('firebaseUser uid:', firebaseUser?.uid, 'auth.currentUser uid:', auth.currentUser?.uid);
     // Save user profile in Firestore using the new user's UID
     await setDoc(doc(db, 'users', firebaseUser.uid), {
       name: displayName,
