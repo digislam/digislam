@@ -700,7 +700,11 @@ window.loginWithPwd = async () => {
     sessionActive = true;
     await loadClasslist();
     enterHome(currentName, false);
-  } catch(e) { err.textContent = e.message; }
+  } catch(e) { 
+    err.textContent = 'session expired — please sign in with Google 👆';
+    document.getElementById('google-section').style.display = 'block';
+    document.querySelector('.or-divider').style.display = 'flex';
+  }
   btn.innerHTML = 'login →'; btn.disabled = false;
   isProcessing = false;
 };
