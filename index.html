@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>DigiSlam - P Batch</title>
+<title>DigiSlam 📒 · P Batch CEG '26</title>
+<link rel="icon" type="image/x-icon" href="/favicon.ico"/>
 <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400;1,600&family=DM+Sans:wght@300;400;500;600&family=Caveat:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
@@ -228,14 +229,14 @@ input[readonly]{opacity:.65;cursor:default;}
 <div class="screen active" id="s-landing">
   <div class="wrap">
     <div class="topbar">
-      <div class="logo">digi<span>slam</span></div>
+      <div class="logo">slam<span>book</span></div>
       <div class="chip">💜 p batch ceg '26</div>
     </div>
     <div style="padding:16px 0 4px;font-size:64px;text-align:center;line-height:1;">📒</div>
     <div style="text-align:center;font-size:28px;margin:6px 0 2px;">💜</div>
     <div style="text-align:center;font-family:'Lora',serif;font-size:13px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--g2);margin-bottom:18px;">P · B A T C H &nbsp; C E G &nbsp; ' 2 6</div>
     <h1 class="page-title">last days,<br><em>never forgotten.</em></h1>
-    <p class="page-sub">P batch's private slam book. write for anyone, read only yours. 💜</p>
+    <p class="page-sub">purpleheart batch's private slam book. write for anyone, read only yours. 💜</p>
     <div class="how-steps">
       <div style="font-size:10px;color:var(--ink3);text-transform:uppercase;letter-spacing:.12em;font-weight:700;margin-bottom:10px;">how it works</div>
       <div class="how-step"><div class="how-num">1</div><div class="how-text"><strong>sign in</strong> with your class Google account</div></div>
@@ -243,7 +244,7 @@ input[readonly]{opacity:.65;cursor:default;}
       <div class="how-step"><div class="how-num">3</div><div class="how-text"><strong>write slams</strong> — describe them, rate them, share something. read only what's written for you 🔒</div></div>
     </div>
     <button class="btn" onclick="go('s-auth')">sign in to slam →</button>
-    <p style="text-align:center;font-size:12px;color:var(--ink3);margin-top:14px;">only 💜 P batch emails work 🔒</p>
+    <p style="text-align:center;font-size:12px;color:var(--ink3);margin-top:14px;">only 💜 p batch emails work 🔒</p>
     <div class="pb"></div>
   </div>
 </div>
@@ -252,16 +253,16 @@ input[readonly]{opacity:.65;cursor:default;}
 <div class="screen" id="s-auth">
   <div class="wrap">
     <div class="topbar">
-      <div class="logo">digi<span>slam</span></div>
+      <div class="logo">slam<span>book</span></div>
       <button class="btn-ghost" onclick="go('s-landing')">← back</button>
     </div>
-    <h1 class="page-title">sign in to<br><em>DigiSlam.</em></h1>
-    <p class="page-sub" id="auth-sub">use your 💜 P batch Google account to continue.</p>
+    <h1 class="page-title">sign in to<br><em>slambook.</em></h1>
+    <p class="page-sub" id="auth-sub">use your 💜 p batch Google account to continue.</p>
 
     <!-- P Batch class photo -->
     <div style="margin-bottom:24px;">
       <div class="slam-photo-pasted" style="max-width:100%;transform:rotate(-0.5deg);cursor:default;">
-        <img src="images/batch.jpg" alt="P Batch CEG 2022-2026" style="width:100%;display:block;object-fit:cover;aspect-ratio:16/9;"/>
+        <img src="/images/batch.jpg" alt="P Batch CEG 2022-2026" style="width:100%;display:block;object-fit:cover;aspect-ratio:16/9;"/>
       </div>
       <div style="text-align:center;font-family:'Caveat',cursive;font-size:17px;color:var(--ink3);margin-top:10px;">P Batch · CEG · 2022–2026 💜</div>
     </div>
@@ -294,7 +295,7 @@ input[readonly]{opacity:.65;cursor:default;}
     </div>
     <button class="btn" onclick="loginWithPwd()" id="login-btn">login →</button>
     <div style="text-align:center;margin-top:14px;">
-      <button class="btn-ghost" onclick="startForgotFlow()">forgot password? sign in with google again</button>
+      <button class="btn-ghost" onclick="startForgotFlow()">forgot password? get reset link</button>
     </div>
     <div class="pb"></div>
   </div>
@@ -304,7 +305,7 @@ input[readonly]{opacity:.65;cursor:default;}
 <div class="screen" id="s-unauth">
   <div class="wrap">
     <div class="topbar">
-      <div class="logo">digi<span>slam</span></div>
+      <div class="logo">slam<span>book</span></div>
     </div>
     <div class="reject-art">🚫</div>
     <div class="reject-title">not in the list, bestie.</div>
@@ -324,7 +325,7 @@ input[readonly]{opacity:.65;cursor:default;}
 <div class="screen" id="s-setpwd">
   <div class="wrap">
     <div class="topbar">
-      <div class="logo">digi<span>slam</span></div>
+      <div class="logo">slam<span>book</span></div>
       <div class="chip">one time setup</div>
     </div>
     <div class="dots"><div class="dot done"></div><div class="dot on"></div></div>
@@ -355,7 +356,7 @@ input[readonly]{opacity:.65;cursor:default;}
         <div class="err" id="confirmpwd-err"></div>
       </div>
     </div>
-    <button class="btn" id="setpwd-btn" onclick="savePassword()">save & enter the DigiSlam →</button>
+    <button class="btn" id="setpwd-btn" onclick="savePassword()">save & enter the slambook →</button>
     <div class="pb"></div>
   </div>
 </div>
@@ -364,7 +365,7 @@ input[readonly]{opacity:.65;cursor:default;}
 <div class="screen" id="s-home">
   <div class="wrap">
     <div class="topbar">
-      <div class="logo">digi<span>slam</span></div>
+      <div class="logo">slam<span>book</span></div>
       <div class="topbar-right">
         <span class="uname" id="topbar-name"></span>
         <button class="logout-btn" onclick="doLogout()">logout</button>
@@ -403,7 +404,7 @@ input[readonly]{opacity:.65;cursor:default;}
 <div class="screen" id="s-person">
   <div class="wrap">
     <div class="topbar">
-      <div class="logo">digi<span>slam</span></div>
+      <div class="logo">slam<span>book</span></div>
       <button class="btn-ghost" onclick="go('s-home')">← classmates</button>
     </div>
     <div class="person-header">
@@ -433,11 +434,7 @@ input[readonly]{opacity:.65;cursor:default;}
             </div>
           </div>
         </div>
-        <textarea 
-          class="notebook-area" 
-          id="slam-text" 
-          placeholder="write anything about them &#10;(nee dha dhairiyam aanava(n/l) aache sollu 🌚..)">
-        </textarea>
+        <textarea class="notebook-area" id="slam-text" placeholder="write anything — their vibe, memories, inside jokes..."></textarea>
       </div>
 
       <div class="nb-sec">
@@ -526,7 +523,9 @@ input[readonly]{opacity:.65;cursor:default;}
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
 import {
   getAuth, GoogleAuthProvider, signInWithPopup, signOut,
-  onAuthStateChanged, setPersistence, browserLocalPersistence
+  onAuthStateChanged, setPersistence, browserLocalPersistence,
+  createUserWithEmailAndPassword, signInWithEmailAndPassword,
+  sendPasswordResetEmail
 } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-auth.js";
 import {
   getFirestore, collection, doc, addDoc, getDocs, getDoc,
@@ -549,7 +548,7 @@ const firebaseConfig = {
 // 🔧 Your Resend API key & sender — set in Firebase Functions env, not here.
 // The actual send happens via a Cloud Function (see SETUP.md).
 // This is just the endpoint you'll deploy.
-const NOTIFY_FUNCTION_URL = "https://us-central1-slam-dbe6f.cloudfunctions.net/notifySlam";
+const NOTIFY_FUNCTION_URL = "https://digislam.vercel.app/api/notify";
 
 const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
@@ -561,45 +560,32 @@ let classlist = [], currentUser = null, currentName = '', currentEmail = '';
 let sessionActive = false, selectedPerson = null, isAnon = true;
 let deleteSlamId = null, bootedScreen = false, isProcessing = false;
 let selectedEmoji = null, penColor = '#1c1914';
-let isForgotFlow = false;
 window._slamImgPaths = {};
-
-window.startForgotFlow = () => {
-  isForgotFlow = true;
-  sessionStorage.setItem('forgotFlow', '1');
-  document.getElementById('google-section').style.display = 'block';
-  document.querySelector('.or-divider').style.display = 'flex';
-};
 
 /* ══ AUTH BOOT ══ */
 onAuthStateChanged(auth, async (user) => {
   if (bootedScreen) return;
   bootedScreen = true;
-  if (user) {
+  if (user && user.providerData[0]?.providerId === 'password') {
+    // Email/password user — restore session directly
     currentUser = user;
-    currentEmail = user.email || '';
+    currentEmail = user.email.toLowerCase();
     try {
-      const ud = await getDoc(doc(db,'users', user.uid));
-      if (ud.exists() && ud.data().hasPassword) {
+      const ud = await getDoc(doc(db, 'users', user.uid));
+      if (ud.exists()) {
         currentName = ud.data().name || '';
         prefillLoginEmail();
         document.getElementById('google-section').style.display = 'none';
         document.querySelector('.or-divider').style.display = 'none';
         go('s-auth');
-      } else {
-        // Google-verified but no password yet
-        const whitelist = await checkWhitelist(currentEmail);
-        if (!whitelist) { await signOut(auth); go('s-unauth'); return; }
-        setupSetPwdScreen(whitelist.name);
-        go('s-setpwd');
+        return;
       }
-    } catch(e) { go('s-landing'); }
-  } else {
-    go('s-landing');
+    } catch(e) {}
   }
+  go('s-landing');
 });
 
-/* ══ GOOGLE SIGN IN ══ */
+/* ══ GOOGLE SIGN IN — first time verification only ══ */
 window.signInWithGoogle = async () => {
   if (isProcessing) return;
   isProcessing = true;
@@ -611,46 +597,48 @@ window.signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const user = result.user;
-    const email = user.email;
+    const email = user.email.toLowerCase();
 
+    // Whitelist check
     const whitelist = await checkWhitelist(email);
     if (!whitelist) {
       await signOut(auth);
       go('s-unauth');
       isProcessing = false;
-      btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.8 2.2 30.3 0 24 0 14.7 0 6.7 5.5 2.7 13.5l7.8 6.1C12.4 13.2 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.4 5.5-5 7.2l7.7 6C43.6 37.7 46.5 31.5 46.5 24.5z"/><path fill="#FBBC05" d="M10.5 28.4c-.5-1.4-.8-3-.8-4.4s.3-3 .8-4.4l-7.8-6.1C1 16.2 0 20 0 24s1 7.8 2.7 11.5l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.3 0 11.6-2.1 15.5-5.7l-7.7-6c-2.1 1.4-4.8 2.2-7.8 2.2-6.2 0-11.6-3.7-13.5-9.1l-7.8 6.1C6.7 42.5 14.7 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg> continue with google`;
+      resetGoogleBtn(btn);
       btn.disabled = false;
       return;
     }
 
-    currentUser = user;
-    currentEmail = email;
-
-    // Check forgot flow from sessionStorage too (survives popup)
-    const forgotFlow = isForgotFlow || sessionStorage.getItem('forgotFlow') === '1';
-    sessionStorage.removeItem('forgotFlow');
-    isForgotFlow = false;
-
-    // Check if password already set — but if forgot flow, always go to set password
-    const ud = await getDoc(doc(db,'users', user.uid));
-    if (ud.exists() && ud.data().hasPassword && !forgotFlow) {
-      currentName = ud.data().name || whitelist.name;
-      sessionActive = true;
-      await loadClasslist();
-      enterHome(currentName, false);
+    // Check if Firebase email/password account already exists
+    const usersSnap = await getDocs(query(collection(db,'users'), where('email','==',email)));
+    if (!usersSnap.empty && usersSnap.docs[0].data().hasPassword) {
+      // Already has account — this is a forgot password flow, go set new password
+      currentEmail = email;
+      // Sign out Google session, set password screen will create email/pwd account
+      await signOut(auth);
+      currentUser = null;
+      setupSetPwdScreen(whitelist.name);
+      go('s-setpwd');
     } else {
+      // First time — go set password
+      currentEmail = email;
+      await signOut(auth); // sign out Google, will sign in with email/pwd after password set
+      currentUser = null;
       setupSetPwdScreen(whitelist.name);
       go('s-setpwd');
     }
   } catch(e) {
-    if (e.code !== 'auth/popup-closed-by-user') {
-      err.textContent = e.message;
-    }
+    if (e.code !== 'auth/popup-closed-by-user') err.textContent = e.message;
   }
-  btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.8 2.2 30.3 0 24 0 14.7 0 6.7 5.5 2.7 13.5l7.8 6.1C12.4 13.2 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.4 5.5-5 7.2l7.7 6C43.6 37.7 46.5 31.5 46.5 24.5z"/><path fill="#FBBC05" d="M10.5 28.4c-.5-1.4-.8-3-.8-4.4s.3-3 .8-4.4l-7.8-6.1C1 16.2 0 20 0 24s1 7.8 2.7 11.5l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.3 0 11.6-2.1 15.5-5.7l-7.7-6c-2.1 1.4-4.8 2.2-7.8 2.2-6.2 0-11.6-3.7-13.5-9.1l-7.8 6.1C6.7 42.5 14.7 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg> continue with google`;
+  resetGoogleBtn(btn);
   btn.disabled = false;
   isProcessing = false;
 };
+
+function resetGoogleBtn(btn) {
+  btn.innerHTML = `<svg width="20" height="20" viewBox="0 0 48 48"><path fill="#EA4335" d="M24 9.5c3.5 0 6.6 1.2 9 3.2l6.7-6.7C35.8 2.2 30.3 0 24 0 14.7 0 6.7 5.5 2.7 13.5l7.8 6.1C12.4 13.2 17.8 9.5 24 9.5z"/><path fill="#4285F4" d="M46.5 24.5c0-1.6-.1-3.1-.4-4.5H24v8.5h12.7c-.6 3-2.4 5.5-5 7.2l7.7 6C43.6 37.7 46.5 31.5 46.5 24.5z"/><path fill="#FBBC05" d="M10.5 28.4c-.5-1.4-.8-3-.8-4.4s.3-3 .8-4.4l-7.8-6.1C1 16.2 0 20 0 24s1 7.8 2.7 11.5l7.8-6.1z"/><path fill="#34A853" d="M24 48c6.3 0 11.6-2.1 15.5-5.7l-7.7-6c-2.1 1.4-4.8 2.2-7.8 2.2-6.2 0-11.6-3.7-13.5-9.1l-7.8 6.1C6.7 42.5 14.7 48 24 48z"/><path fill="none" d="M0 0h48v48H0z"/></svg> continue with google`;
+}
 
 window.signOutAndBack = async () => {
   await signOut(auth).catch(()=>{});
@@ -660,13 +648,12 @@ window.signOutAndBack = async () => {
 async function checkWhitelist(email) {
   if (!email) return null;
   const emailLower = email.toLowerCase().trim();
-  // Check by email field
   const snap = await getDocs(query(collection(db,'classlist'), where('email','==',emailLower)));
   if (!snap.empty) return { id: snap.docs[0].id, ...snap.docs[0].data() };
   return null;
 }
 
-/* ══ PASSWORD LOGIN ══ */
+/* ══ PASSWORD LOGIN — Firebase native, works on any device ══ */
 function prefillLoginEmail() {
   const el = document.getElementById('login-email');
   if (el && currentEmail) { el.value = currentEmail; el.readOnly = false; el.style.opacity = '1'; }
@@ -681,31 +668,62 @@ window.loginWithPwd = async () => {
   err.textContent = '';
   if (!email) { err.textContent = 'enter your email'; isProcessing = false; return; }
   if (!pwd) { err.textContent = 'enter your password'; isProcessing = false; return; }
-  if (!currentUser) { err.textContent = 'session lost — use Google sign-in'; isProcessing = false; return; }
   const btn = document.getElementById('login-btn');
   btn.innerHTML = '<span class="spin dark"></span>checking…'; btn.disabled = true;
   try {
-    const ud = await getDoc(doc(db, 'users', currentUser.uid));
-    if (!ud.exists() || !ud.data().hasPassword) {
-      err.textContent = 'no password set — use Google sign-in';
-      btn.innerHTML = 'login →'; btn.disabled = false; isProcessing = false; return;
-    }
-    const hash = await hashPwd(pwd, email);
-    if (hash !== ud.data().pwdHash) {
-      err.textContent = 'wrong password';
-      btn.innerHTML = 'login →'; btn.disabled = false; isProcessing = false; return;
-    }
-    currentName = ud.data().name || '';
+    // Firebase native email/password sign in — works on any device
+    const result = await signInWithEmailAndPassword(auth, email, pwd);
+    currentUser = result.user;
     currentEmail = email;
+    const ud = await getDoc(doc(db, 'users', currentUser.uid));
+    currentName = ud.exists() ? (ud.data().name || '') : '';
     sessionActive = true;
     await loadClasslist();
     enterHome(currentName, false);
-  } catch(e) { err.textContent = e.message; }
+  } catch(e) {
+    if (e.code === 'auth/invalid-credential' || e.code === 'auth/wrong-password') {
+      err.textContent = 'wrong password';
+    } else if (e.code === 'auth/user-not-found') {
+      err.textContent = 'no account found — sign in with Google first';
+    } else {
+      err.textContent = e.message;
+    }
+  }
   btn.innerHTML = 'login →'; btn.disabled = false;
   isProcessing = false;
 };
 
-/* ══ SET PASSWORD ══ */
+/* ══ FORGOT PASSWORD — Firebase sends reset email ══ */
+window.startForgotFlow = async () => {
+  const email = document.getElementById('login-email').value.trim().toLowerCase();
+  const err = document.getElementById('login-err');
+  err.textContent = '';
+  if (!email) {
+    // No email typed — show Google sign in to verify identity first
+    document.getElementById('google-section').style.display = 'block';
+    document.querySelector('.or-divider').style.display = 'flex';
+    return;
+  }
+  // Check whitelist first
+  const whitelist = await checkWhitelist(email);
+  if (!whitelist) { err.textContent = 'email not in class list'; return; }
+  try {
+    await sendPasswordResetEmail(auth, email);
+    err.style.color = 'var(--g2)';
+    err.textContent = `✅ reset link sent to ${email} — check your inbox!`;
+    setTimeout(() => { err.textContent = ''; err.style.color = 'var(--red)'; }, 5000);
+  } catch(e) {
+    if (e.code === 'auth/user-not-found') {
+      // Account doesn't exist yet — go Google flow to create one
+      document.getElementById('google-section').style.display = 'block';
+      document.querySelector('.or-divider').style.display = 'flex';
+    } else {
+      err.textContent = e.message;
+    }
+  }
+};
+
+/* ══ SET PASSWORD — creates Firebase email/password account ══ */
 function setupSetPwdScreen(greeting) {
   document.getElementById('setup-greeting').textContent = greeting ? greeting.split(' ')[0] : 'there';
   document.getElementById('setname-in').value = currentEmail;
@@ -728,14 +746,27 @@ window.savePassword = async () => {
   const btn = document.getElementById('setpwd-btn');
   btn.innerHTML = '<span class="spin"></span>saving…'; btn.disabled = true;
   try {
-    const hash = await hashPwd(pwd, currentEmail);
     const whitelist = await checkWhitelist(currentEmail);
     const displayName = whitelist ? whitelist.name : currentEmail;
+    let firebaseUser;
+    try {
+      // Try creating new account
+      const result = await createUserWithEmailAndPassword(auth, currentEmail, pwd);
+      firebaseUser = result.user;
+    } catch(e) {
+      if (e.code === 'auth/email-already-in-use') {
+        // Account exists (forgot pwd flow) — sign in and update password via reauthentication
+        // Firebase handles this via password reset email, so just sign in
+        const result = await signInWithEmailAndPassword(auth, currentEmail, pwd);
+        firebaseUser = result.user;
+      } else { throw e; }
+    }
+    currentUser = firebaseUser;
+    // Save user profile in Firestore
     await setDoc(doc(db,'users', currentUser.uid), {
       name: displayName,
       email: currentEmail,
       hasPassword: true,
-      pwdHash: hash,
       uid: currentUser.uid,
       createdAt: serverTimestamp()
     }, { merge: true });
@@ -761,13 +792,12 @@ function enterHome(name, isNew) {
   toast(isNew ? `welcome, ${name.split(' ')[0]}! 🌿` : `good to see you, ${name.split(' ')[0]}! 🌿`);
 }
 
-window.doLogout = () => {
+window.doLogout = async () => {
   sessionActive = false;
   selectedPerson = null;
-  // hide google section, show only password login
-  document.getElementById('google-section').style.display = 'none';
-  document.querySelector('.or-divider').style.display = 'none';
-  go('s-auth');
+  await signOut(auth).catch(()=>{});
+  currentUser = null; currentEmail = ''; currentName = '';
+  go('s-landing');
   toast('logged out 👋');
 };
 
@@ -840,6 +870,8 @@ async function openPersonPage(person) {
   document.getElementById('ph-sub').textContent = 'loading…';
   const firstName = person.name.split(' ')[0];
   document.getElementById('desc-label').textContent = `describe ${firstName}`;
+  document.getElementById('slam-text').placeholder = `write anything about ${firstName} — their vibe, memories, inside jokes...`;
+  document.getElementById('extras-text').placeholder = `who you are, what you love, something ${firstName} should remember you by...`;
   document.getElementById('rate-label').textContent = `rate ${firstName}`;
   const writerFirst = currentName ? currentName.split(' ')[0] : 'you';
   document.getElementById('about-label').textContent = `about you, ${writerFirst}`;
@@ -868,7 +900,8 @@ function resetWriteForm() {
 
 // Imgur anonymous upload — no account needed
 // Client ID from a free registered Imgur app (read-only, safe to expose)
-const VERCEL_URL = "https://digislam.vercel.app";
+const VERCEL_URL = "https://your-project.vercel.app"; // 🔧 replace with your Vercel URL
+
 let uploadedImgUrl = null;
 
 window.handleImgUpload = async (e) => {
@@ -1237,7 +1270,6 @@ window.setPenColor = (el, color) => {
   document.getElementById('slam-text').style.color = color;
 };
 async function sha256(str) { const buf=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(str)); return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join(''); }
-async function hashPwd(pwd, email) { return await sha256(email + pwd + email); }
 function esc(s) { if(!s)return''; return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/\n/g,'<br>'); }
 window.toast = (msg, warn=false) => { const el=document.getElementById('toast'); el.textContent=msg; el.style.background=warn?'var(--red)':'var(--g)'; el.classList.add('on'); setTimeout(()=>el.classList.remove('on'),3200); };
 window.go = (id) => { document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active')); const t=document.getElementById(id); if(t)t.classList.add('active'); window.scrollTo(0,0); };
