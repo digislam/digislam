@@ -734,7 +734,9 @@ window.savePassword = async () => {
   const btn = document.getElementById('setpwd-btn');
   btn.innerHTML = '<span class="spin"></span>saving…'; btn.disabled = true;
   try {
+    console.log('savePassword start, currentEmail:', currentEmail, 'auth.currentUser:', auth.currentUser?.uid);
     const whitelist = await checkWhitelist(currentEmail);
+    console.log('whitelist result:', whitelist);
     const displayName = whitelist ? whitelist.name : currentEmail;
     let firebaseUser;
     try {
