@@ -738,24 +738,27 @@ window.savePassword = async () => {
     const displayName = whitelist ? whitelist.name : currentEmail;
     let firebaseUser;
     try {
-      // Try creating new account
       const result = await createUserWithEmailAndPassword(auth, currentEmail, pwd);
       firebaseUser = result.user;
     } catch(e) {
       if (e.code === 'auth/email-already-in-use') {
-        // Account exists (forgot pwd flow) — sign in and update password via reauthentication
-        // Firebase handles this via password reset email, so just sign in
-        const result = await signInWithEmailAndPassword(auth, currentEmail, pwd);
-        firebaseUser = result.user;
+        // Forgot password flow — sign in with new password won't work since old pwd is different
+        // Send reset email instead
+        await sendPasswordResetEmail(auth, currentEmail);
+        e1.style.color = 'var(--g2)';
+        e1.textContent = '✅ account exists — reset link sent to your Gmail. click it to set new password.';
+        btn.innerHTML = 'save & enter →'; btn.disabled = false;
+        isProcessing = false;
+        return;
       } else { throw e; }
     }
     currentUser = firebaseUser;
-    // Save user profile in Firestore
-    await setDoc(doc(db,'users', currentUser.uid), {
+    // Save user profile in Firestore using the new user's UID
+    await setDoc(doc(db, 'users', firebaseUser.uid), {
       name: displayName,
       email: currentEmail,
       hasPassword: true,
-      uid: currentUser.uid,
+      uid: firebaseUser.uid,
       createdAt: serverTimestamp()
     }, { merge: true });
     currentName = displayName;
