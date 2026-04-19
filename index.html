@@ -610,24 +610,12 @@ window.signInWithGoogle = async () => {
       return;
     }
 
-    // Check if Firebase email/password account already exists
-    const usersSnap = await getDocs(query(collection(db,'users'), where('email','==',email)));
-    if (!usersSnap.empty && usersSnap.docs[0].data().hasPassword) {
-      // Already has account — this is a forgot password flow, go set new password
-      currentEmail = email;
-      // Sign out Google session, set password screen will create email/pwd account
-      await signOut(auth);
-      currentUser = null;
-      setupSetPwdScreen(whitelist.name);
-      go('s-setpwd');
-    } else {
-      // First time — go set password
-      currentEmail = email;
-      await signOut(auth); // sign out Google, will sign in with email/pwd after password set
-      currentUser = null;
-      setupSetPwdScreen(whitelist.name);
-      go('s-setpwd');
-    }
+    // Always go to set password screen — Firebase handles existing account
+    currentEmail = email;
+    await signOut(auth);
+    currentUser = null;
+    setupSetPwdScreen(whitelist.name);
+    go('s-setpwd');
   } catch(e) {
     if (e.code !== 'auth/popup-closed-by-user') err.textContent = e.message;
   }
