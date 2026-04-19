@@ -750,6 +750,8 @@ window.savePassword = async () => {
   } catch(e) {
     e1.textContent = e.message;
     btn.innerHTML = 'save & enter →'; btn.disabled = false;
+    isProcessing = false;
+    return;
   }
   isProcessing = false;
 };
