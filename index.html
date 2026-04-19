@@ -594,11 +594,11 @@ window.signInWithGoogle = async () => {
   try {
     const result = await signInWithPopup(auth, provider);
     const email = result.user.email.toLowerCase();
-    // Sign out Google immediately — we only needed it for verification
-    await signOut(auth);
-    // Whitelist check
+    // Whitelist check BEFORE signing out
     const whitelist = await checkWhitelist(email);
-    if (!whitelist) { go('s-unauth'); isProcessing = false; resetGoogleBtn(btn); btn.disabled = false; return; }
+    if (!whitelist) { await signOut(auth); go('s-unauth'); isProcessing = false; resetGoogleBtn(btn); btn.disabled = false; return; }
+    // Sign out Google — we only needed it for verification
+    await signOut(auth);
     // Store email for set-password screen
     pendingEmail = email;
     currentEmail = email;
