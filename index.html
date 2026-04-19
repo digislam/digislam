@@ -558,6 +558,7 @@ window._slamImgPaths = {};
 
 // Pending email for set-password screen (set after Google verify, before account creation)
 let pendingEmail = '';
+let pendingName = '';
 
 /* ══ AUTH BOOT ══ */
 onAuthStateChanged(auth, async (user) => {
@@ -601,6 +602,7 @@ window.signInWithGoogle = async () => {
     await signOut(auth);
     // Store email for set-password screen
     pendingEmail = email;
+    pendingName = whitelist.name;
     currentEmail = email;
     setupSetPwdScreen(whitelist.name);
     go('s-setpwd');
@@ -708,8 +710,7 @@ window.savePassword = async () => {
   btn.innerHTML = '<span class="spin"></span>saving…'; btn.disabled = true;
   const email = pendingEmail || currentEmail;
   try {
-    const whitelist = await checkWhitelist(email);
-    const displayName = whitelist ? whitelist.name : email;
+    const displayName = pendingName || email;
     // Create Firebase email/password account — Google is already signed out
     let firebaseUser;
     try {
@@ -738,6 +739,7 @@ window.savePassword = async () => {
     currentName = displayName;
     sessionActive = true;
     pendingEmail = '';
+    pendingName = '';
     await loadClasslist();
     enterHome(currentName, true);
   } catch(e) {
