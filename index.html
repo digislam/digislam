@@ -801,7 +801,7 @@ async function loadClasslist() {
     try {
       classlist = JSON.parse(cached);
       renderList(classlist);
-      loadSlamCounts(classlist); // still fetch counts fresh
+      loadSlamCounts(classlist);
       return;
     } catch(e) { sessionStorage.removeItem('classlist_v1'); }
   }
