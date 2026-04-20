@@ -1004,8 +1004,8 @@ window.postSlam = async () => {
   const err = document.getElementById('slam-err');
   err.textContent = '';
   if (!content) { err.textContent = 'describe section required!'; isProcessing = false; return; }
-  if (content.length > 20000) { err.textContent = 'too long — max 20000 characters'; isProcessing = false; return; }
-  if (extras.length > 20000) { err.textContent = 'about section too long — max 20000 characters'; isProcessing = false; return; }
+  if (content.length > 2000000) { err.textContent = 'too long — max 2000000 characters'; isProcessing = false; return; }
+  if (extras.length > 2000000) { err.textContent = 'about section too long — max 2000000 characters'; isProcessing = false; return; }
   if (!selectedPerson) { err.textContent = 'no person selected'; isProcessing = false; return; }
   if (!sessionActive || !currentUser) { go('s-auth'); isProcessing = false; return; }
   const btn = document.getElementById('post-btn');
