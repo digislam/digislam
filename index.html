@@ -1111,6 +1111,12 @@ async function loadMySlams() {
   docs.forEach(d => { window._mySlamDocs[d.id] = d; });
 }
 
+// ════════════════════════════════════════════════════════════════
+// DROP-IN REPLACEMENT for the exportSlams function in DigiSlam HTML
+// Find:   window.exportSlams = () => {
+// Replace the entire function (up to and including the closing };) with this:
+// ════════════════════════════════════════════════════════════════
+
 window.exportSlams = () => {
   const slams = window._allSlamDataForExport;
   if (!slams?.length) { toast('no slams to export!', true); return; }
@@ -1118,51 +1124,197 @@ window.exportSlams = () => {
   const btn = document.getElementById('export-btn');
   btn.disabled = true; btn.textContent = '⏳ preparing…';
 
-  const slamPages = slams.map(({ data }) => {
-    const date = data.timestamp?.toDate?.().toLocaleDateString('en-IN',{day:'numeric',month:'short',year:'2-digit'}) || '';
-    const from = data.isAnon ? '👤 Anonymous' : (data.fromName || 'Someone');
-    const ink = data.penColor || '#1c1914';
-    const e = s => (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>');
-    const emojiHtml = data.emoji ? ['😍','😂','😊','😁','😐'].map(em=>`<span style="font-size:${em===data.emoji?'28px':'16px'};opacity:${em===data.emoji?1:.2}">${em}</span>`).join('') : '';
+  function escX(s) {
+    if (!s) return '';
+    return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')
+            .replace(/"/g,'&quot;').replace(/\n/g,'<br>');
+  }
 
-    return `<div style="width:210mm;min-height:297mm;background:#fefcf3;background-image:linear-gradient(90deg,transparent 54px,#e8a4a4 54px,#e8a4a4 56px,transparent 56px),linear-gradient(transparent 35px,#b8d0e8 1px);background-size:100% 36px;page-break-after:always;break-after:page;display:flex;flex-direction:column;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
-      <div style="background:#ece8db;border-bottom:1.5px solid #c8bca0;padding:8px 20px;display:flex;align-items:center;gap:10px;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
-        ${Array(6).fill('<div style="width:12px;height:12px;border-radius:50%;background:white;border:1.5px solid #b4a88e;flex-shrink:0;"></div><div style="flex:1;height:1px;background:#c4b89a;"></div>').join('')}
-      </div>
-      <div style="flex:1;padding:0 20px 0 72px;">
-        <div style="height:36px;display:flex;align-items:center;justify-content:space-between;">
-          <span style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:#276135;">${e(from)}</span>
-          <span style="font-family:'Caveat',cursive;font-size:20px;color:#8c826e;">${date}</span>
+  const LH = 36; // line-height in px — matches the mobile CSS variable --lh
+
+  const slamPages = slams.map(({ data }) => {
+    const date = data.timestamp?.toDate?.().toLocaleDateString('en-IN',{
+      day:'numeric', month:'short', year:'2-digit'
+    }) || '';
+
+    const fromLabel  = data.isAnon ? '👤 anonymous' : escX(data.fromName || 'someone');
+    const writerFirst = data.isAnon ? null : (data.fromName || '').split(' ')[0];
+    const inkColor   = data.penColor || '#1c1914';
+    const descTitle  = data.isAnon ? 'what they think about you' : `what ${writerFirst} thinks about you`;
+    const aboutTitle = data.isAnon ? 'about them' : `about ${writerFirst}`;
+
+    // ── Spiral holes row ──
+    const holesHtml = [0,1,2,3,4].map((_, i) =>
+      `<div style="width:11px;height:11px;border-radius:50%;background:#f5f0e8;border:1.5px solid #b4a88e;flex-shrink:0;"></div>`
+      + (i < 4 ? `<div style="flex:1;height:1px;background:linear-gradient(90deg,transparent,#c4b89a 30%,#c4b89a 70%,transparent);"></div>` : '')
+    ).join('');
+
+    // ── Section header helper ──
+    const section = (label) =>
+      `<div style="height:${LH}px;width:100%;background:rgba(30,77,43,0.10);border-top:1px solid rgba(30,77,43,0.25);border-bottom:1px solid rgba(30,77,43,0.25);display:flex;align-items:center;padding:0 18px 0 66px;flex-shrink:0;box-sizing:border-box;">
+        <span style="font-family:'DM Sans',sans-serif;font-size:10px;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#1e4d2b;line-height:1;">${label}</span>
+      </div>`;
+
+    // ── Handwritten text block ──
+    const textBlock = (txt, color) =>
+      `<div style="font-family:'Caveat',cursive;font-size:20px;line-height:${LH}px;word-break:break-word;white-space:pre-wrap;color:${color};padding:6px 18px 0 66px;min-height:${LH}px;">${escX(txt)}</div>`;
+
+    // ── Gap (empty ruled line) ──
+    const gap = `<div style="height:${LH}px;flex-shrink:0;"></div>`;
+
+    // ── Optional sections ──
+    const emojiSection = data.emoji
+      ? section('rated you')
+        + `<div style="height:${LH}px;display:flex;align-items:center;gap:10px;padding:0 18px 0 66px;flex-shrink:0;">
+            ${['😍','😂','😊','😁','😐'].map(e =>
+              `<span style="font-size:${e===data.emoji?'26px':'18px'};opacity:${e===data.emoji?1:.28}">${e}</span>`
+            ).join('')}
+          </div>`
+      : '';
+
+    const extrasSection = data.extras
+      ? section(aboutTitle) + textBlock(data.extras, '#4a443a')
+      : '';
+
+    const contactSection = (!data.isAnon && (data.contactPhone || data.insta))
+      ? section('contact me at')
+        + `<div style="font-family:'Caveat',cursive;font-size:19px;display:flex;gap:20px;flex-wrap:wrap;align-items:center;height:${LH}px;padding:2px 18px 0 66px;flex-shrink:0;overflow:hidden;color:#4a443a;">
+            ${data.contactPhone ? `<span>📱 ${escX(data.contactPhone)}</span>` : ''}
+            ${data.insta ? `<span>@${escX(data.insta)}</span>` : ''}
+          </div>`
+      : '';
+
+    const photoSection = data.imgUrl
+      ? section('a memory')
+        + `<div style="padding:${LH * 0.5}px 0;display:flex;justify-content:center;">
+            <div style="position:relative;display:inline-block;background:#fff;padding:8px 8px 30px;
+                        box-shadow:2px 4px 14px rgba(0,0,0,.18),0 1px 3px rgba(0,0,0,.08);
+                        transform:rotate(-1.5deg);max-width:72%;">
+              <img src="${data.imgUrl.replace(/'/g,'%27')}"
+                   style="width:100%;display:block;object-fit:cover;aspect-ratio:4/3;"
+                   crossorigin="anonymous"/>
+            </div>
+          </div>`
+      : '';
+
+    // ── Full card ──
+    return `
+    <div style="width:390px;margin:0 auto;padding:20px 0 40px;background:#f5f0e8;page-break-after:always;break-after:page;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
+
+      <div style="background:#fefcf3;border:1.5px solid #c8bca0;border-radius:3px 3px 8px 8px;
+                  overflow:hidden;box-shadow:2px 3px 14px rgba(0,0,0,.10);transform:rotate(-0.35deg);">
+
+        <!-- Spiral / holes -->
+        <div style="background:#ece8db;border-bottom:1.5px solid #c8bca0;display:flex;align-items:center;padding:7px 18px;gap:16px;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
+          ${holesHtml}
         </div>
-        <div style="height:2px;background:rgba(192,57,43,.55);margin:0 -20px 0 -72px;"></div>
-        <div style="height:36px;display:flex;align-items:center;background:rgba(30,77,43,.1);border-top:1px solid rgba(30,77,43,.25);border-bottom:1px solid rgba(30,77,43,.25);margin:0 -20px 0 -72px;padding:0 20px 0 72px;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:.16em;color:#1e4d2b;-webkit-print-color-adjust:exact;print-color-adjust:exact;">WHAT THEY THINK ABOUT YOU</div>
-        <div style="font-family:'Caveat',cursive;font-size:21px;line-height:36px;color:${ink};white-space:pre-wrap;word-break:break-word;padding-top:4px;">${e(data.content)}</div>
-        ${data.emoji ? `<div style="height:36px;display:flex;align-items:center;background:rgba(30,77,43,.1);margin:0 -20px 0 -72px;padding:0 20px 0 72px;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:.16em;color:#1e4d2b;-webkit-print-color-adjust:exact;print-color-adjust:exact;">RATED YOU</div><div style="display:flex;align-items:center;gap:10px;height:36px;">${emojiHtml}</div>` : ''}
-        ${data.extras ? `<div style="height:36px;display:flex;align-items:center;background:rgba(30,77,43,.1);margin:0 -20px 0 -72px;padding:0 20px 0 72px;font-family:'DM Sans',sans-serif;font-size:9px;font-weight:700;letter-spacing:.16em;color:#1e4d2b;-webkit-print-color-adjust:exact;print-color-adjust:exact;">ABOUT THEM</div><div style="font-family:'Caveat',cursive;font-size:21px;line-height:36px;color:#4a443a;white-space:pre-wrap;word-break:break-word;padding-top:4px;">${e(data.extras)}</div>` : ''}
-        ${data.imgUrl ? `<div style="padding:18px 0;display:flex;justify-content:center;"><div style="background:#fff;padding:8px 8px 28px;box-shadow:2px 4px 14px rgba(0,0,0,.18);transform:rotate(-1.5deg);max-width:55%;"><img src="${data.imgUrl}" style="width:100%;display:block;aspect-ratio:4/3;object-fit:cover;max-height:180px;" crossorigin="anonymous"/></div></div>` : ''}
+
+        <!-- Ruled notebook paper body -->
+        <div style="background-color:#fefcf3;
+                    background-image:
+                      linear-gradient(90deg,transparent 52px,#e8a4a4 52px,#e8a4a4 54px,transparent 54px),
+                      linear-gradient(transparent ${LH - 1}px,#b8d0e8 1px);
+                    background-size:100% ${LH}px;
+                    background-position:0 0;
+                    -webkit-print-color-adjust:exact;
+                    print-color-adjust:exact;">
+
+          ${gap}
+
+          <!-- From + date row -->
+          <div style="height:${LH}px;display:flex;align-items:center;justify-content:space-between;padding:0 18px 0 66px;flex-shrink:0;">
+            <span style="font-family:'DM Sans',sans-serif;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:#276135;line-height:1;">${fromLabel}</span>
+            <span style="font-family:'Caveat',cursive;font-size:18px;color:#8c826e;line-height:1;">${date}</span>
+          </div>
+
+          <!-- Red separator -->
+          <div style="height:2px;background:rgba(192,57,43,.55);flex-shrink:0;-webkit-print-color-adjust:exact;print-color-adjust:exact;"></div>
+
+          ${gap}
+
+          ${section(descTitle)}
+          ${textBlock(data.content, inkColor)}
+          ${emojiSection}
+          ${extrasSection}
+          ${contactSection}
+          ${photoSection}
+
+          <!-- Bottom spacer -->
+          <div style="height:${LH * 1.5}px;"></div>
+        </div>
+
       </div>
-      <div style="height:36px;display:flex;align-items:center;justify-content:center;font-size:10px;color:#8c826e;letter-spacing:.1em;border-top:1px solid #e3dac8;">DigiSlam · P Batch CEG '26 · 💜</div>
     </div>`;
   }).join('');
 
-  const cover = `<div style="width:210mm;min-height:297mm;background:#1e4d2b;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:48px 40px;page-break-after:always;break-after:page;-webkit-print-color-adjust:exact;print-color-adjust:exact;">
+  // ── Cover page ──
+  const cover = `
+  <div style="width:390px;margin:0 auto;min-height:600px;background:#1e4d2b;
+              display:flex;flex-direction:column;align-items:center;justify-content:center;
+              text-align:center;padding:48px 40px;
+              page-break-after:always;break-after:page;
+              -webkit-print-color-adjust:exact;print-color-adjust:exact;">
     <div style="font-size:64px;margin-bottom:20px;">📒💜</div>
-    <div style="font-family:'Lora',serif;font-size:42px;color:#fff;margin-bottom:12px;">digi<em style="opacity:.7">slam</em></div>
-    <div style="font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.2em;text-transform:uppercase;margin-bottom:28px;">P · BATCH · CEG · 2022–2026</div>
-    <div style="font-family:'Caveat',cursive;font-size:50px;color:#fff;margin-bottom:6px;">${(currentName||'your').split(' ')[0]}'s Slam Book</div>
-    <div style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:32px;">exported ${new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}</div>
-    <div style="border:1.5px solid rgba(255,255,255,.25);border-radius:30px;padding:10px 24px;font-size:13px;color:rgba(255,255,255,.6);">${slams.length} slam${slams.length!==1?'s':''} inside 💌</div>
+    <div style="font-family:'Lora',serif;font-size:42px;color:#fff;margin-bottom:12px;">
+      digi<em style="opacity:.7">slam</em>
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,.5);letter-spacing:.2em;text-transform:uppercase;margin-bottom:28px;">
+      P · BATCH · CEG · 2022–2026
+    </div>
+    <div style="font-family:'Caveat',cursive;font-size:46px;color:#fff;margin-bottom:6px;">
+      ${(currentName || 'your').split(' ')[0]}'s Slam Book
+    </div>
+    <div style="font-size:12px;color:rgba(255,255,255,.4);margin-bottom:32px;">
+      exported ${new Date().toLocaleDateString('en-IN',{day:'numeric',month:'long',year:'numeric'})}
+    </div>
+    <div style="border:1.5px solid rgba(255,255,255,.25);border-radius:30px;padding:10px 24px;font-size:13px;color:rgba(255,255,255,.6);">
+      ${slams.length} slam${slams.length !== 1 ? 's' : ''} inside 💌
+    </div>
   </div>`;
 
   const win = window.open('', '_blank');
-  if (!win) { toast('allow pop-ups and try again ⚠️', true); btn.disabled=false; btn.textContent=`⬇ export ${slams.length} slams`; return; }
+  if (!win) {
+    toast('allow pop-ups and try again ⚠️', true);
+    btn.disabled = false;
+    btn.textContent = `⬇ export ${slams.length} slams`;
+    return;
+  }
 
-  win.document.write(`<!DOCTYPE html><html><head><meta charset="UTF-8"/><link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=DM+Sans:wght@400;600;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet"/><style>*{box-sizing:border-box;margin:0;padding:0;}body{background:#e8e4d9;-webkit-print-color-adjust:exact;print-color-adjust:exact;}@page{size:A4;margin:0;}@media print{body{background:transparent;}}</style></head><body>${cover}${slamPages}<script>window.addEventListener('load',()=>setTimeout(()=>window.print(),900));<\/script></body></html>`);
+  win.document.write(`<!DOCTYPE html>
+    <html>
+    <head>
+      <meta charset="UTF-8"/>
+      <meta name="viewport" content="width=390px, initial-scale=1.0"/>
+      <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=DM+Sans:wght@400;600;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet"/>
+      <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+          background: #e3dac8;
+          -webkit-print-color-adjust: exact;
+          print-color-adjust: exact;
+        }
+        @page { size: 390px auto; margin: 0; }
+        @media print {
+          body { background: #e3dac8; }
+        }
+      </style>
+    </head>
+    <body>
+      ${cover}
+      ${slamPages}
+      <script>
+        window.addEventListener('load', () => {
+          // Extra delay so Google Fonts & remote images fully render
+          setTimeout(() => window.print(), 1600);
+        });
+      <\/script>
+    </body>
+    </html>`);
   win.document.close();
 
   toast('slam book ready — save as PDF! 📄');
   btn.disabled = false;
-  btn.textContent = `⬇ export ${slams.length} slam${slams.length!==1?'s':''}`;
+  btn.textContent = `⬇ export ${slams.length} slam${slams.length !== 1 ? 's' : ''}`;
 };
   
 window.toggleSlamExpand = (id, headerEl) => {
