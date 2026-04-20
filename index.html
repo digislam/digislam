@@ -1303,7 +1303,7 @@ window.exportSlams = () => {
       a.style = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1e4d2b;color:#fff;padding:14px 28px;border-radius:30px;font-size:16px;z-index:9999;text-decoration:none;';
       a.textContent = '📄 tap to open & save PDF';
       document.body.appendChild(a);
-      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url), 30000);
+      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 30000);
     
       toast('slam book ready — save as PDF! 📄');
       btn.disabled = false;
