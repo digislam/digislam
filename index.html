@@ -1272,15 +1272,7 @@ window.exportSlams = () => {
     </div>
   </div>`;
 
-  const win = window.open('', '_blank');
-  if (!win) {
-    toast('allow pop-ups and try again ⚠️', true);
-    btn.disabled = false;
-    btn.textContent = `⬇ export ${slams.length} slams`;
-    return;
-  }
-
-  win.document.write(`<!DOCTYPE html>
+  const html = `<!DOCTYPE html>
     <html>
     <head>
       <meta charset="UTF-8"/>
@@ -1288,34 +1280,33 @@ window.exportSlams = () => {
       <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=DM+Sans:wght@400;600;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet"/>
       <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-        body {
-          background: #e3dac8;
-          -webkit-print-color-adjust: exact;
-          print-color-adjust: exact;
-        }
-        @page { size: 390px auto; margin: 0; }
-        @media print {
-          body { background: #e3dac8; }
-        }
+        body { background: #e3dac8; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+        @page { size: 390px 900px; margin: 0; }
+        @media print { body { background: #e3dac8; } }
       </style>
     </head>
     <body>
       ${cover}
       ${slamPages}
       <script>
-        window.addEventListener('load', () => {
-          // Extra delay so Google Fonts & remote images fully render
-          setTimeout(() => window.print(), 1600);
-        });
+        window.addEventListener('load', () => { setTimeout(() => window.print(), 1600); });
       <\/script>
     </body>
-    </html>`);
-  win.document.close();
-
-  toast('slam book ready — save as PDF! 📄');
-  btn.disabled = false;
-  btn.textContent = `⬇ export ${slams.length} slam${slams.length !== 1 ? 's' : ''}`;
-};
+    </html>`;
+    
+      const blob = new Blob([html], { type: 'text/html' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.target = '_blank';
+      a.rel = 'noopener';
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 10000);
+    
+      toast('slam book ready — save as PDF! 📄');
+      btn.disabled = false;
+      btn.textContent = `⬇ export ${slams.length} slam${slams.length !== 1 ? 's' : ''}`;
+    };
   
 window.toggleSlamExpand = (id, headerEl) => {
   const expandEl = document.getElementById(`slam-expand-${id}`);
