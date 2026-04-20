@@ -1298,18 +1298,14 @@ window.exportSlams = () => {
       const url = URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.target = '_blank';
-      a.rel = 'noopener';
-      a.style = 'position:fixed;bottom:30px;left:50%;transform:translateX(-50%);background:#1e4d2b;color:#fff;padding:14px 28px;border-radius:30px;font-size:16px;z-index:9999;text-decoration:none;';
-      a.textContent = '📄 tap to open & save PDF';
-      document.body.appendChild(a);
-      setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 30000);
-
-      toast('slam book ready — save as PDF! 📄');
+      a.download = `${(currentName||'my').split(' ')[0]}-slambook.html`;
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 5000);
+    
+      toast('slam book downloading! open it in browser to print as PDF 📄');
       btn.disabled = false;
       btn.textContent = `⬇ export ${slams.length} slam${slams.length !== 1 ? 's' : ''}`;
-    };
-  
+    };  
 window.toggleSlamExpand = (id, headerEl) => {
   const expandEl = document.getElementById(`slam-expand-${id}`);
   const arrow = document.getElementById(`arrow-${id}`);
