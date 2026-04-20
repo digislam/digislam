@@ -1304,7 +1304,7 @@ window.exportSlams = () => {
       a.textContent = '📄 tap to open & save PDF';
       document.body.appendChild(a);
       setTimeout(() => { document.body.removeChild(a); URL.revokeObjectURL(url); }, 30000);
-    
+
       toast('slam book ready — save as PDF! 📄');
       btn.disabled = false;
       btn.textContent = `⬇ export ${slams.length} slam${slams.length !== 1 ? 's' : ''}`;
