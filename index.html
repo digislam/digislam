@@ -1117,7 +1117,7 @@ async function loadMySlams() {
 // Replace the entire function (up to and including the closing };) with this:
 // ════════════════════════════════════════════════════════════════
 
-window.exportSlams = () => {
+window.exportSlams = async () => {
   const slams = window._allSlamDataForExport;
   if (!slams?.length) { toast('no slams to export!', true); return; }
 
@@ -1132,6 +1132,33 @@ window.exportSlams = () => {
 
   const LH = 36; // line-height in px — matches the mobile CSS variable --lh
 
+  async function toBase64(url) {
+    try {
+      const res = await fetch(url);
+      const blob = await res.blob();
+      return new Promise(r => { const reader = new FileReader(); reader.onload = () => r(reader.result); reader.readAsDataURL(blob); });
+    } catch { return url; }
+  }
+
+  async function getFonts() {
+    try {
+      const css = await fetch('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=DM+Sans:wght@400;600;700&family=Caveat:wght@400;600&display=swap').then(r => r.text());
+      const urls = [...css.matchAll(/url\((https:\/\/[^)]+)\)/g)].map(m => m[1]);
+      let inlined = css;
+      for (const url of urls) {
+        const b64 = await toBase64(url);
+        inlined = inlined.replace(url, b64);
+      }
+      return `<style>${inlined}</style>`;
+    } catch { return `<link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=DM+Sans:wght@400;600;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet"/>`; }
+  }
+
+  // embed all images
+  for (const slam of slams) {
+    if (slam.data.imgUrl) {
+      slam.data._imgB64 = await toBase64(slam.data.imgUrl);
+    }
+  }
   const slamPages = slams.map(({ data }) => {
     const date = data.timestamp?.toDate?.().toLocaleDateString('en-IN',{
       day:'numeric', month:'short', year:'2-digit'
@@ -1190,7 +1217,7 @@ window.exportSlams = () => {
             <div style="position:relative;display:inline-block;background:#fff;padding:8px 8px 30px;
                         box-shadow:2px 4px 14px rgba(0,0,0,.18),0 1px 3px rgba(0,0,0,.08);
                         transform:rotate(-1.5deg);max-width:72%;">
-              <img src="${data.imgUrl.replace(/'/g,'%27')}"
+              <img src="${data._imgB64 || data.imgUrl}"
                    style="width:100%;display:block;object-fit:cover;aspect-ratio:4/3;"
                    crossorigin="anonymous"/>
             </div>
@@ -1277,7 +1304,7 @@ window.exportSlams = () => {
     <head>
       <meta charset="UTF-8"/>
       <meta name="viewport" content="width=390px, initial-scale=1.0"/>
-      <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;1,400&family=DM+Sans:wght@400;600;700&family=Caveat:wght@400;600&display=swap" rel="stylesheet"/>
+      ${await getFonts()}
       <style>
         *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
         body { background: #e3dac8; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
