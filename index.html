@@ -1294,18 +1294,29 @@ window.exportSlams = () => {
     </body>
     </html>`;
     
-      const blob = new Blob([html], { type: 'text/html' });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `${(currentName||'my').split(' ')[0]}-slambook.html`;
-      a.click();
-      setTimeout(() => URL.revokeObjectURL(url), 5000);
-    
-      toast('slam book downloading! open it in browser to print as PDF 📄');
-      btn.disabled = false;
-      btn.textContent = `⬇ export ${slams.length} slam${slams.length !== 1 ? 's' : ''}`;
-    };  
+      const container = document.createElement('div');
+      container.innerHTML = `${cover}${slamPages}`;
+      document.body.appendChild(container);
+
+      const script = document.createElement('script');
+      script.src = 'https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';
+      script.onload = () => {
+        html2pdf().set({
+          margin: 0,
+          filename: `${(currentName||'my').split(' ')[0]}-slambook.pdf`,
+          image: { type: 'jpeg', quality: 0.95 },
+          html2canvas: { scale: 2, useCORS: true },
+          jsPDF: { unit: 'px', format: [390, 900], orientation: 'portrait' }
+        }).from(container).save().then(() => {
+          document.body.removeChild(container);
+          toast('slam book downloaded as PDF! 📄');
+          btn.disabled = false;
+          btn.textContent = `⬇ export ${slams.length} slam${slams.length !== 1 ? 's' : ''}`;
+        });
+      };
+      document.head.appendChild(script);
+};
+  
 window.toggleSlamExpand = (id, headerEl) => {
   const expandEl = document.getElementById(`slam-expand-${id}`);
   const arrow = document.getElementById(`arrow-${id}`);
